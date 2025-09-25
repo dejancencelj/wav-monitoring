@@ -1,7 +1,5 @@
 # wer-tester
 
-Zelo kratek opis: Orodje za live test STT za slovenščino; mi nadzorujemo pošiljanje avdia (chunki, realtime/maxspeed), vi vračate transkripte; rezultate sproti prikažemo in zapišemo v log.
-
 Orodje za testiranje govor-v-besedilo (STT) ponudnikov za slovenščino v živo. Nadzorujemo oddajanje avdio segmentov (dolžina chunk-a, simulacija realnega časa ali pošiljanje z največjo hitrostjo) in sproti spremljamo vračanje JSON segmentov besedila. Vsi segmenti in dogodki se zapišejo v lokalne loge (JSONL/CSV), hkrati pa so vidni na prikazu (CLI/GUI). Ponudnik doda svojo implementacijo `Provider` ter se vključi preko `--provider module:Class`.
 
 Tri komponente:
@@ -29,8 +27,8 @@ wer-tester --file pot/do/test.wav --chunk-ms 200 --mode realtime --interim on --
 
 3) Zaženite GUI:
 
-```pwsh
-wer-tester-gui
+```
+.\scripts\run-gui.ps1
 ```
 
 ## Parametri
@@ -43,7 +41,7 @@ wer-tester-gui
 
 ## Dnevniški zapisi (log)
 
-- `receiver.jsonl`: vsaka vrstica je JSON s polji: time_utc, type, segment_id, start_ms, end_ms, text, is_final, provider_meta
+- `receiver.jsonl`: vsaka vrstica je JSON s polji: time_utc, type, segment_id, start_ms, end_ms, text, is_final, provider_meta, confidence
 - `receiver.csv`: CSV z istimi ključnimi podatki
 - `events.jsonl`: generični dogodki (povezava, napake, ...)
 
@@ -63,9 +61,12 @@ Ponudnik implementira razred, ki razširi `Provider`:
     "end_ms": 4200,
     "text": "primer besedila",
     "is_final": false,
-    "provider_meta": {"latency_ms": 120}
+    "provider_meta": {"latency_ms": 120},
+    "confidence": 0.95
   }
   ```
+
+  Opomba: Polje `confidence` je opcijsko in predstavlja zaupanje v transkript (običajno med 0.0 in 1.0).
 
 Glej `wer_tester/provider.py` za definicijo ABC in `wer_tester/mock_provider.py` za popolnoma delujoč primer.
 
@@ -114,3 +115,7 @@ V mapi `scripts/` so pripravljene bližnjice:
 ## Licence
 
 MIT
+
+## Spremembe
+
+- **2025-09-25**: Dodano polje `confidence` za zaupanje v transkripte. MockProvider generira naključne vrednosti zaupanja med 0.5 in 1.0.
