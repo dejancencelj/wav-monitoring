@@ -49,6 +49,7 @@ class MockProvider(Provider):
             "is_final": is_final,
             "provider_meta": {"latency_ms": self._latency_ms},
             "time_utc": time.time(),
+            "confidence": random.uniform(0.5, 1.0),
         }
         await self._queue.put(evt)
 
