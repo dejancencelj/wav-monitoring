@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wer-tester"
+version = "0.1.0"
+description = "Live STT provider test harness (Slovenian) with controllable audio chunking, receiver logging, and display."
+authors = [
+  { name = "Albert", email = "albert@example.com" }
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  # Keep minimal; use stdlib where possible
+]
+
+[project.scripts]
+wer-tester = "wer_tester.cli:main"
+wer-tester-gui = "wer_tester.gui:main"
+
+[tool.setuptools]
+packages = ["wer_tester"]
+include-package-data = true
